@@ -44,8 +44,8 @@ def main():
     # Filter out already scanned folders and check for existing consolidated_metadata.json
     folders_to_process = []
     for f in folders:
-        # If it's already marked as True in our JSON, skip it
-        if scanned_folders.get(f.name) is True:
+        # If it exists in our JSON, skip it
+        if f.name in scanned_folders:
             continue
             
         # If the consolidated_metadata.json already exists in the folder, mark it True and skip
@@ -88,18 +88,18 @@ def main():
             print(f"Finished {folder.name}")
             
             # Record success so we can skip next time
+            scanned_folders[folder.name] = True
+            
             consolidated_path = folder / "consolidated_metadata.json"
-            success = consolidated_path.exists()
-            scanned_folders[folder.name] = success
+            if not consolidated_path.exists():
+                print(f"Warning: {folder.name} processed successfully but no consolidated_metadata.json was generated.")
             
             with open(scanned_file, 'w', encoding='utf-8') as f:
                 json.dump(scanned_folders, f, indent=4)
                 
-            if not success:
-                print(f"Warning: {folder.name} processed successfully but no consolidated_metadata.json was generated.")
-                
         except subprocess.CalledProcessError as e:
             print(f"Error processing {folder.name}: {e}")
+            # If there's a script crash, keep it false so it tries again later
             scanned_folders[folder.name] = False
             
         # 4. Apply the 2 second delay required to space out the API hits and folder completions

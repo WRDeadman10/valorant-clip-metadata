@@ -18,12 +18,13 @@ This tool scans your clip directories, precisely timestamps the video file, comm
 
 ## Key Features
 1. **Pinpoint Round Mapping**: Calculates exactly which round your 30-second clip occurred in by matching your local video creation time against the official Riot match timeline API.
-2. **True Kill Statistics**: Extracts *only* the kills the player achieved in the specific round the clip was recorded in (omitting kills from earlier/later rounds).
+2. **True Kill Statistics**: Extracts *only* the kills the player achieved in the specific round the clip was recorded in.
 3. **Advanced Damage Breakdown**: Provides a `round_details` dictionary mapping the exact victims, weapons used, and damage dealt for every kill in the clip.
 4. **Interchangeable APIs**: Full support for both the unofficial **HenrikDev V3** API (default/free) and the official **Riot API**.
-5. **Smart Rate-Limit Evasion**: Uses robust file-based caching with an intelligent 1-hour expiration buffer, guaranteeing you won't get banned for API spam.
-6. **Background Batching**: Includes a smart directory crawler (`batch_runner.py`) that safely processes hundreds of legacy folders while adhering strictly to API throttling rules (30 requests/min).
-7. **Auto-Resume Skip Logic**: The batch processor stores results in `scanned_folders.json`. If execution is stopped, it instantly resumes exactly where it left off, bypassing previously verified folders natively.
+5. **Overwolf Log Fallback Parsing**: Scans raw Overwolf AppData logs natively (`parse_logs.py` and `parse_overwolf_bg_logs.py`) to scrape Map names and Character choices natively when API match histories expire.
+6. **Smart Rate-Limit Evasion**: Uses robust file-based caching with an intelligent 1-hour expiration buffer, guaranteeing you won't get banned for API spam.
+7. **Background Batching**: Includes a smart directory crawler (`batch_runner.py`) that safely processes hundreds of legacy folders while adhering strictly to API throttling rules (30 requests/min).
+8. **Auto-Resume Skip Logic**: The batch processor stores results in `scanned_folders.json`. If execution is stopped or a folder is determined to have expired metadata, it instantly bypasses verified folders on future runs natively.
 
 ## How it Works
 1. Scans a Tracker Network video filename (e.g., `VALORANT 03-08-2026 2-46-25-817.mp4`) assuming local Indian Standard Time (IST).
